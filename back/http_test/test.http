@@ -1,0 +1,23 @@
+### health check
+GET http://localhost:18080
+Content-Type: application/json
+
+### get
+GET http://localhost:18080/todos/c2790627-87fa-42ad-b182-d788e649beda
+Accept: application/json
+
+### list
+GET http://localhost:18080/todos
+Accept: application/json
+
+### add
+PUT http://localhost:18080/todos
+Content-Type: application/json
+
+{
+  "title": "test dayo"
+}
+
+### delete
+DELETE http://localhost:18080/todos/175649a5-a9b7-45ac-ac0e-eeafdd987001
+Content-Type: application/json
