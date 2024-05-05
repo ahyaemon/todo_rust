@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, put, delete};
+use actix_cors::Cors;
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, put, delete, http::header};
 use actix_web::{Result};
 use dotenvy_macro::dotenv;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 mod domain;
 mod application;
@@ -20,6 +21,7 @@ use crate:: {
 use crate::application::add_todo_use_case::AddTodoUseCase;
 use crate::application::delete_todo_use_case::DeleteTodoUseCase;
 use crate::application::list_todos_use_case::ListTodosUseCase;
+use crate::domain::todo::Todo;
 
 struct AppState {
     get_todo_use_case: GetTodoUseCase<TodoRepositoryImpl>,
@@ -40,11 +42,17 @@ async fn get_todo(id: web::Path<String>, data: web::Data<AppState>) -> Result<im
     Ok(web::Json(todo))
 }
 
+#[derive(Serialize)]
+struct ListTodosResponse {
+    todos: Vec<Todo>
+}
+
 #[get("/todos")]
 async fn list_todos(data: web::Data<AppState>) -> Result<impl Responder> {
     let use_case = &data.list_todos_use_case;
     let todos = use_case.act();
-    Ok(web::Json(todos))
+    let response = ListTodosResponse { todos };
+    Ok(web::Json(response))
 }
 
 #[derive(Deserialize)]
@@ -75,6 +83,12 @@ async fn delete_todo(
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let hash_map = Mutex::new(HashMap::new());
+
+    let uuid = "501d09e6-c484-47e3-941a-7496c61d224b".to_string();
+    hash_map.lock().unwrap().insert(uuid.clone(), Todo::new(&uuid, "title"));
+    let uuid2 = "3ed82377-3072-4b79-8bdb-d4c3158fd755".to_string();
+    hash_map.lock().unwrap().insert(uuid2.clone(), Todo::new(&uuid2, "title2"));
+
     let repository = Arc::new(TodoRepositoryImpl::new(hash_map));
     let app_data = web::Data::new(AppState {
         get_todo_use_case: GetTodoUseCase::new(repository.clone()),
@@ -87,6 +101,15 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .wrap(
+                Cors::default()
+                    .allowed_origin("http://localhost:3000")
+                    .allowed_methods(vec!["GET", "PUT", "DELETE"])
+                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+                    .allowed_header(header::CONTENT_TYPE)
+                    .supports_credentials()
+                    .max_age(3600),
+            )
             .app_data(app_data.clone())
             .service(health_check)
             .service(get_todo)
