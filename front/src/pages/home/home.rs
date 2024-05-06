@@ -1,6 +1,7 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
+use dioxus_router::prelude::*;
 use serde::Deserialize;
 use tracing::Level;
 use crate::Route::About;
@@ -22,17 +23,22 @@ struct ListTodosResponse {
     todos: Vec<Todo>
 }
 
-#[component]
-fn TodoCard(todo: Todo) -> Element {
+#[derive(PartialEq, Props, Clone)]
+struct TodoCardProps {
+    todo: Todo,
+}
+
+fn TodoCard(props: TodoCardProps) -> Element {
+    let todo = props.todo;
     rsx! {
-        div { "todo card" }
+        div { "{todo.id}" }
     }
 }
 
 #[component]
 pub fn Home() -> Element {
     let mut count = use_signal(|| 0);
-    let future = use_resource(|| async move {
+    let mut future = use_resource(|| async move {
         // reqwest::get("https://dog.ceo/api/breeds/image/random")
         reqwest::get("http://localhost:18080/todos")
             .await
@@ -42,6 +48,40 @@ pub fn Home() -> Element {
     });
 
     let todos = match &*future.read_unchecked() {
+        Some(Ok(response)) => {
+            let todos = &response.todos;
+            let todo_items = todos.iter().map( |r| {
+                rsx! {
+                    div {
+                        TodoCard {
+                            todo: r.clone()
+                        }
+                        span {{ r.id.clone() }}
+                        span { ": " }
+                        span {{ r.title.clone() }}
+                    }
+                }
+            });
+
+            log(&format!("ok: {:?}", response.todos));
+            rsx! {
+                div { { todo_items } }
+            }
+        }
+        Some(Err(e)) => {
+            log(&format!("err: {}", e));
+            rsx! {
+                p { "Error occurred" }
+            }
+        }
+        None => {
+            log("none");
+            rsx! {
+                p { "Loading..." }
+            }
+        }
+    };
+    let todos2 = match &*future.read_unchecked() {
         Some(Ok(response)) => {
             let todos = &response.todos;
             let todo_items = todos.iter().map( |r| {
