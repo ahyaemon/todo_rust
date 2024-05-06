@@ -2,18 +2,23 @@
 
 use dioxus::prelude::*;
 use crate::adapter::todo_client::list_todos;
-use crate::Route::About;
+use crate::Route::{AboutPage, TodoPage};
 use crate::pages::home::todo_card::TodoCard;
 
 #[component]
-pub fn Home() -> Element {
+pub fn HomePage() -> Element {
     let future = use_resource(list_todos);
 
     let todos = match &*future.read_unchecked() {
         Some(Ok(response)) => {
             let todos = &response.todos;
-            let todo_items = todos.iter().map( |r| {
-                rsx! { li { TodoCard { todo: r.clone() } } }
+            let todo_items = todos.iter().map( |todo| {
+                rsx! {
+                    Link {
+                        to: TodoPage { id: todo.id.clone() },
+                        li { TodoCard { todo: todo.clone() } }
+                    }
+                }
             });
             rsx! {
                 ul {
@@ -31,7 +36,7 @@ pub fn Home() -> Element {
     };
 
     rsx! {
-        Link { to: About {}, "Go to about" }
+        Link { to: AboutPage {}, "Go to about" }
         div {
             class: "flex flex-col items-center",
             h1 {

@@ -1,12 +1,12 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
-use crate::Route::Home;
+use crate::Route::HomePage;
 
 #[component]
-pub fn About() -> Element {
+pub fn AboutPage() -> Element {
     rsx! {
-        Link { to: Home {}, "Go to home" }
+        Link { to: HomePage {}, "Go to home" }
         h1 { "About" }
         hr {}
         p { "I am ahyaemon." }
