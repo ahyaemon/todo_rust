@@ -10,8 +10,7 @@ pub fn TodoCard(props: TodoCardProps) -> Element {
     let todo = props.todo;
     rsx! {
         div {
-            span { "{todo.id}" }
-            span { ": " }
+            class: "border-2 p-4 min-w-80",
             span { "{todo.title}" }
         }
     }

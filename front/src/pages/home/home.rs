@@ -16,7 +16,10 @@ pub fn Home() -> Element {
                 rsx! { li { TodoCard { todo: r.clone() } } }
             });
             rsx! {
-                ul { { todo_items } }
+                ul {
+                    class: "flex flex-col gap-1",
+                    { todo_items }
+                }
             }
         }
         Some(Err(_e)) => {
@@ -30,9 +33,18 @@ pub fn Home() -> Element {
     rsx! {
         Link { to: About {}, "Go to about" }
         div {
-            h1 { "TODO List" }
-            hr {}
-            { todos }
+            class: "flex flex-col items-center",
+            h1 {
+                class: "text-xl mt-2",
+                "TODO List"
+            }
+            hr {
+                class: "border-1 border-slate-500 w-dvw"
+            }
+            div {
+                class: "mt-2 px-4",
+                { todos }
+            }
         }
     }
 }
