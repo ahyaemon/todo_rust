@@ -5,6 +5,8 @@ use tracing::Level;
 
 mod pages;
 mod utils;
+mod domain;
+mod adapter;
 
 use crate::pages::{
     home::home::Home,

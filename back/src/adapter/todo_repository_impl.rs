@@ -10,6 +10,10 @@ pub struct TodoRepositoryImpl {
 impl TodoRepositoryImpl {
 
     pub fn new(hash_map: Mutex<HashMap<String, Todo>>) -> Self {
+        let uuid = "501d09e6-c484-47e3-941a-7496c61d224b".to_string();
+        hash_map.lock().unwrap().insert(uuid.clone(), Todo::new(&uuid, "title"));
+        let uuid2 = "3ed82377-3072-4b79-8bdb-d4c3158fd755".to_string();
+        hash_map.lock().unwrap().insert(uuid2.clone(), Todo::new(&uuid2, "title2"));
         TodoRepositoryImpl { hash_map }
     }
 }

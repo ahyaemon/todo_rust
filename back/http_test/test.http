@@ -3,7 +3,7 @@ GET http://localhost:18080
 Content-Type: application/json
 
 ### get
-GET http://localhost:18080/todos/c2790627-87fa-42ad-b182-d788e649beda
+GET http://localhost:18080/todos/501d09e6-c484-47e3-941a-7496c61d224b
 Accept: application/json
 
 ### list
@@ -19,5 +19,5 @@ Content-Type: application/json
 }
 
 ### delete
-DELETE http://localhost:18080/todos/175649a5-a9b7-45ac-ac0e-eeafdd987001
+DELETE http://localhost:18080/todos/2a7e1d52-d477-4326-be63-59c037e2f29a
 Content-Type: application/json
