@@ -1,5 +1,6 @@
 use serde::Deserialize;
 use reqwest::Result;
+use reqwest::Client;
 use crate::domain::todo::Todo;
 
 #[derive(Deserialize, Debug)]
@@ -25,5 +26,29 @@ pub async fn get_todo(id: String) -> Result<GetTodoResponse> {
         .await
         .unwrap()
         .json::<GetTodoResponse>()
+        .await
+}
+
+pub struct AddTodoRequest {
+    title: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct AddTodoResponse {
+    pub todo: Todo,
+}
+
+pub async fn add_todo(title: &str) -> Result<AddTodoResponse> {
+    let client = Client::new();
+    let json = &serde_json::json!({
+        "title": title,
+    });
+    client
+        .put("http://localhost:18080/todos")
+        .json(json)
+        .send()
+        .await
+        .unwrap()
+        .json::<AddTodoResponse>()
         .await
 }

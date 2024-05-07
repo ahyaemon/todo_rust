@@ -7,6 +7,7 @@ mod pages;
 mod utils;
 mod domain;
 mod adapter;
+mod components;
 
 use crate::pages::home::home_page::HomePage;
 use crate::pages::about::about_page::AboutPage;

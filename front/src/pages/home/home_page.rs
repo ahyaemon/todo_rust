@@ -1,7 +1,8 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
-use crate::adapter::todo_client::list_todos;
+use crate::adapter::todo_client::{add_todo, list_todos};
+use crate::components::divider::Divider;
 use crate::Route::{AboutPage, TodoPage};
 use crate::pages::home::todo_card::TodoCard;
 
@@ -9,7 +10,7 @@ use crate::pages::home::todo_card::TodoCard;
 pub fn HomePage() -> Element {
     let future = use_resource(list_todos);
 
-    let todos = match &*future.read_unchecked() {
+    let todo_ul = match &*future.read_unchecked() {
         Some(Ok(response)) => {
             let todos = &response.todos;
             let todo_items = todos.iter().map( |todo| {
@@ -22,7 +23,7 @@ pub fn HomePage() -> Element {
             });
             rsx! {
                 ul {
-                    class: "flex flex-col gap-1",
+                    class: "flex flex-col gap-2",
                     { todo_items }
                 }
             }
@@ -39,16 +40,21 @@ pub fn HomePage() -> Element {
         Link { to: AboutPage {}, "Go to about" }
         div {
             class: "flex flex-col items-center",
-            h1 {
-                class: "text-xl mt-2",
-                "TODO List"
-            }
-            hr {
-                class: "border-1 border-slate-500 w-dvw"
+            h1 { class: "text-xl mt-2", "TODO List" }
+            Divider { class: "mt-2" }
+            div {
+                button {
+                    class: "bg-green-700 text-white px-4 py-3 mt-2 rounded",
+                    onclick: |event| async move {
+                        add_todo("test todo").await.unwrap();
+                        tracing::info!("Clicked! Event: {event:?}")
+                    },
+                    "NEW Todo"
+                }
             }
             div {
                 class: "mt-2 px-4",
-                { todos }
+                { todo_ul }
             }
         }
     }

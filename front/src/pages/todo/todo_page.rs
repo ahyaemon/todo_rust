@@ -2,6 +2,7 @@
 
 use dioxus::prelude::*;
 use crate::adapter::todo_client::{get_todo};
+use crate::components::divider::Divider;
 use crate::Route::HomePage;
 
 #[component]
@@ -29,13 +30,8 @@ pub fn TodoPage(id: String) -> Element {
         Link { to: HomePage {}, "Go to home" }
         div {
             class: "flex flex-col items-center",
-            h1 {
-                class: "text-xl mt-2",
-                "TODO"
-            }
-            hr {
-                class: "border-1 border-slate-500 w-dvw"
-            }
+            h1 { class: "text-xl mt-2", "TODO" }
+            Divider { class: "mt-2" }
             p {{todo}}
         }
     }
