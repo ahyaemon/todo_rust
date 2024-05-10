@@ -1,1 +1,3 @@
-pub mod todo_page;
+pub mod detail;
+pub mod add;
+pub mod list;

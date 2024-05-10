@@ -3,10 +3,10 @@
 use dioxus::prelude::*;
 use crate::adapter::todo_client::{get_todo};
 use crate::components::divider::Divider;
-use crate::Route::HomePage;
+use crate::layouts::menu::Menu;
 
 #[component]
-pub fn TodoPage(id: String) -> Element {
+pub fn TodoDetailPage(id: String) -> Element {
     let todo_future = use_resource(move || {
         let id_cloned = id.clone();
         async move {
@@ -27,12 +27,18 @@ pub fn TodoPage(id: String) -> Element {
     };
 
     rsx! {
-        Link { to: HomePage {}, "Go to home" }
+        Menu {}
         div {
             class: "flex flex-col items-center",
             h1 { class: "text-xl mt-2", "TODO" }
+
             Divider { class: "mt-2" }
-            p {{todo}}
+
+            div {
+                class: "flex flex-row gap-2 items-center",
+                p { "Title:" }
+                p { {todo} }
+            }
         }
     }
 }

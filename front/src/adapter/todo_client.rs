@@ -29,10 +29,6 @@ pub async fn get_todo(id: String) -> Result<GetTodoResponse> {
         .await
 }
 
-pub struct AddTodoRequest {
-    title: String,
-}
-
 #[derive(Deserialize, Debug)]
 pub struct AddTodoResponse {
     pub todo: Todo,

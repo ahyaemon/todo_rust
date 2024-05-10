@@ -8,19 +8,23 @@ mod utils;
 mod domain;
 mod adapter;
 mod components;
+mod layouts;
 
-use crate::pages::home::home_page::HomePage;
 use crate::pages::about::about_page::AboutPage;
-use crate::pages::todo::todo_page::TodoPage;
+use crate::pages::todo::list::todo_list_page::TodoListPage;
+use crate::pages::todo::detail::todo_detail_page::TodoDetailPage;
+use crate::pages::todo::add::todo_add_page::TodoAddPage;
 
 #[derive(Clone, Routable, Debug, PartialEq)]
 enum Route {
     #[route("/")]
-    HomePage {},
+    TodoListPage {},
     #[route("/about")]
     AboutPage {},
     #[route("/todos/:id")]
-    TodoPage { id: String }
+    TodoDetailPage { id: String },
+    #[route("/todos/new")]
+    TodoAddPage {},
 }
 
 fn main() {
