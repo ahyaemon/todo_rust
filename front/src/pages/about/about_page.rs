@@ -10,7 +10,11 @@ pub fn AboutPage() -> Element {
         Menu {}
         h1 { class: "text-xl mt-2", "About" }
         Divider { class: "mt-2" }
-        p { "I am ahyaemon." }
-        "Blog post"
+        p { "Hello, I am Ahyaemon." }
+        a {
+            href: "https://github.com/ahyaemon/todo_rust",
+            target: "_blank",
+            "https://github.com/ahyaemon/todo_rust"
+        }
     }
 }
