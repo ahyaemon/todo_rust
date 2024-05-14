@@ -4,12 +4,17 @@ use serde::Serialize;
 pub struct Todo {
     id: String,
     title: String,
+    description: String,
 }
 
 impl Todo {
 
-    pub fn new(id: &str, title: &str) -> Self {
-        Todo { id: String::from(id), title: String::from(title) }
+    pub fn new(
+        id: String,
+        title: String,
+        description: String,
+    ) -> Self {
+        Todo { id, title, description }
     }
 
     pub fn id(&self) -> &str {

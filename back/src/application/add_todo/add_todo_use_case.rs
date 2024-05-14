@@ -13,9 +13,9 @@ impl<T: TodoRepository> AddTodoUseCase<T> {
         AddTodoUseCase { todo_repository }
     }
 
-    pub fn act(&self, title: &str) -> Todo {
+    pub fn act(&self, title: String, description: String) -> Todo {
         let id = Uuid::new_v4();
-        let todo = Todo::new(&id.to_string(), title);
+        let todo = Todo::new(id.to_string(), title, description);
         self.todo_repository.add(todo)
     }
 }

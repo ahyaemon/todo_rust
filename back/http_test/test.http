@@ -15,7 +15,8 @@ PUT http://localhost:18080/todos
 Content-Type: application/json
 
 {
-  "title": "test dayo"
+  "title": "test title",
+  "description": "test description"
 }
 
 ### delete

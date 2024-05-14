@@ -16,7 +16,16 @@ pub fn TodoDetailPage(id: String) -> Element {
     let todo = match &*todo_future.read_unchecked() {
         Some(Ok(response)) => {
             let todo = &response.todo;
-            rsx! { p { "{todo.title}" } }
+            rsx! {
+                div {
+                    class: "flex flex-row gap-2 items-center",
+                    p { b { "{todo.title}" } }
+                }
+                div {
+                    class: "mt-2",
+                    div { "{todo.description}" }
+                }
+            }
         }
         Some(Err(_e)) => {
             rsx! { p { "Error occurred: {_e}" } }
@@ -35,9 +44,8 @@ pub fn TodoDetailPage(id: String) -> Element {
             Divider { class: "mt-2" }
 
             div {
-                class: "flex flex-row gap-2 items-center",
-                p { "Title:" }
-                p { {todo} }
+                class: "mt-2",
+                { todo }
             }
         }
     }

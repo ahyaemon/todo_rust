@@ -11,6 +11,7 @@ pub fn TodoAddPage() -> Element {
 
     let nav = navigator();
     let mut title = use_signal(|| "".to_string());
+    let mut description = use_signal(|| "".to_string());
 
     rsx! {
         Menu {}
@@ -23,13 +24,23 @@ pub fn TodoAddPage() -> Element {
             div {
                 class: "mt-2 flex flex-col gap-2",
                 div {
-                    class: "flex flex-row gap-2 items-center",
+                    class: "flex flex-col items-left",
                     p { "Title:" }
                     input {
                         class: "border-solid border-slate-500 border-2 rounded px-2",
                         placeholder: "Title",
                         value: "{title}",
                         oninput: move |event| title.set(event.value())
+                    }
+                }
+                div {
+                    class: "flex flex-col items-left",
+                    p { "Description:" }
+                    textarea {
+                        class: "border-solid border-slate-500 border-2 rounded px-2 w-80 h-40",
+                        placeholder: "Description",
+                        value: "{description}",
+                        oninput: move |event| description.set(event.value())
                     }
                 }
                 button {
