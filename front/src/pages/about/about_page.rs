@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 
-use dioxus::prelude::*;
 use crate::components::divider::Divider;
 use crate::layouts::menu::Menu;
+use dioxus::prelude::*;
 
 #[component]
 pub fn AboutPage() -> Element {

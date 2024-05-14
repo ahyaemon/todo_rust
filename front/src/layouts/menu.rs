@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::Route::{AboutPage, TodoListPage};
+use dioxus::prelude::*;
 
 pub fn Menu() -> Element {
     rsx! {

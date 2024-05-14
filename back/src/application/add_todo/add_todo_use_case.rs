@@ -1,14 +1,13 @@
-use std::sync::{Arc};
-use uuid::Uuid;
 use crate::application::todo_repository::TodoRepository;
 use crate::domain::todo::Todo;
+use std::sync::Arc;
+use uuid::Uuid;
 
 pub struct AddTodoUseCase<T: TodoRepository> {
     todo_repository: Arc<T>,
 }
 
 impl<T: TodoRepository> AddTodoUseCase<T> {
-
     pub fn new(todo_repository: Arc<T>) -> Self {
         AddTodoUseCase { todo_repository }
     }

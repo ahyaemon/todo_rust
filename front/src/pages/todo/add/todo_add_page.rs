@@ -1,14 +1,13 @@
 #![allow(non_snake_case)]
 
-use dioxus::prelude::*;
 use crate::adapter::todo_client::add_todo;
 use crate::components::divider::Divider;
 use crate::layouts::menu::Menu;
-use crate::Route::{TodoDetailPage};
+use crate::Route::TodoDetailPage;
+use dioxus::prelude::*;
 
 #[component]
 pub fn TodoAddPage() -> Element {
-
     let nav = navigator();
     let mut title = use_signal(|| "".to_string());
     let mut description = use_signal(|| "".to_string());

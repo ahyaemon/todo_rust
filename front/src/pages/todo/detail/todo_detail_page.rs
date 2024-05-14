@@ -1,17 +1,15 @@
 #![allow(non_snake_case)]
 
-use dioxus::prelude::*;
-use crate::adapter::todo_client::{get_todo};
+use crate::adapter::todo_client::get_todo;
 use crate::components::divider::Divider;
 use crate::layouts::menu::Menu;
+use dioxus::prelude::*;
 
 #[component]
 pub fn TodoDetailPage(id: String) -> Element {
     let todo_future = use_resource(move || {
         let id_cloned = id.clone();
-        async move {
-            get_todo(id_cloned).await
-        }
+        async move { get_todo(id_cloned).await }
     });
     let todo = match &*todo_future.read_unchecked() {
         Some(Ok(response)) => {

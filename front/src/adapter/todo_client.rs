@@ -1,7 +1,7 @@
-use serde::Deserialize;
-use reqwest::Result;
-use reqwest::Client;
 use crate::domain::todo::Todo;
+use reqwest::Client;
+use reqwest::Result;
+use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub struct TodoSummary {

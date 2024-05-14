@@ -1,7 +1,7 @@
-use std::sync::Arc;
-use serde::Serialize;
 use crate::application::todo_repository::TodoRepository;
 use crate::domain::todo::Todo;
+use serde::Serialize;
+use std::sync::Arc;
 
 #[derive(Serialize)]
 pub struct TodoSummary {
@@ -15,7 +15,11 @@ impl From<&Todo> for TodoSummary {
         let title = todo.title.to_string();
         let short_description = &todo.description[..24];
         let description_summary = format!("{}...", short_description);
-        TodoSummary { id: todo.id.clone(), title, description_summary }
+        TodoSummary {
+            id: todo.id.clone(),
+            title,
+            description_summary,
+        }
     }
 }
 
@@ -24,7 +28,6 @@ pub struct ListTodoSummariesUseCase<T: TodoRepository> {
 }
 
 impl<T: TodoRepository> ListTodoSummariesUseCase<T> {
-
     pub fn new(todo_repository: Arc<T>) -> Self {
         ListTodoSummariesUseCase { todo_repository }
     }

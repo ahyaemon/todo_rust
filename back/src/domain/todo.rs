@@ -8,13 +8,12 @@ pub struct Todo {
 }
 
 impl Todo {
-
-    pub fn new(
-        id: String,
-        title: String,
-        description: String,
-    ) -> Self {
-        Todo { id, title, description }
+    pub fn new(id: String, title: String, description: String) -> Self {
+        Todo {
+            id,
+            title,
+            description,
+        }
     }
 
     pub fn id(&self) -> &str {

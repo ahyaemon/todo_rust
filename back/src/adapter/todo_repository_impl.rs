@@ -1,27 +1,26 @@
-use std::collections::HashMap;
-use std::sync::Mutex;
 use crate::application::todo_repository::TodoRepository;
 use crate::domain::todo::Todo;
+use std::collections::HashMap;
+use std::sync::Mutex;
 
 pub struct TodoRepositoryImpl {
-    hash_map: Mutex<HashMap<String, Todo>>
+    hash_map: Mutex<HashMap<String, Todo>>,
 }
 
 impl TodoRepositoryImpl {
-
     pub fn new(hash_map: Mutex<HashMap<String, Todo>>) -> Self {
         let uuid1 = "501d09e6-c484-47e3-941a-7496c61d224b".to_string();
         let todo1 = Todo::new(
             uuid1.clone(),
             "title1".to_string(),
-            "This is description. This is description. This is description.".to_string()
+            "This is description. This is description. This is description.".to_string(),
         );
         hash_map.lock().unwrap().insert(uuid1, todo1);
         let uuid2 = "3ed82377-3072-4b79-8bdb-d4c3158fd755".to_string();
         let todo2 = Todo::new(
             uuid2.clone(),
             "title2".to_string(),
-            "This is description. This is description. This is description.".to_string()
+            "This is description. This is description. This is description.".to_string(),
         );
         hash_map.lock().unwrap().insert(uuid2, todo2);
         TodoRepositoryImpl { hash_map }
@@ -29,20 +28,20 @@ impl TodoRepositoryImpl {
 }
 
 impl TodoRepository for TodoRepositoryImpl {
-
     fn get(&self, id: &str) -> Todo {
         self.hash_map.lock().unwrap().get(id).unwrap().clone()
     }
 
     fn list(&self) -> Vec<Todo> {
-        let mut vec: Vec<Todo> = self.hash_map
+        let mut vec: Vec<Todo> = self
+            .hash_map
             .lock()
             .unwrap()
             .clone()
             .into_iter()
             .map(|(_, v)| v)
             .collect();
-        vec.sort_by(|a, b| { a.id().cmp(b.id()) });
+        vec.sort_by(|a, b| a.id().cmp(b.id()));
         vec
     }
 
@@ -60,11 +59,11 @@ impl TodoRepository for TodoRepositoryImpl {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
-    use std::sync::Mutex;
     use crate::adapter::todo_repository_impl::TodoRepositoryImpl;
     use crate::application::todo_repository::TodoRepository;
     use crate::domain::todo::Todo;
+    use std::collections::HashMap;
+    use std::sync::Mutex;
 
     fn get_repository() -> TodoRepositoryImpl {
         let hash_map = Mutex::new(HashMap::new());

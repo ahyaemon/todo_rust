@@ -1,11 +1,11 @@
-use actix_web::{Responder, web, Result};
-use serde::Serialize;
-use crate::AppState;
 use crate::domain::todo::Todo;
+use crate::AppState;
+use actix_web::{web, Responder, Result};
+use serde::Serialize;
 
 #[derive(Serialize)]
 struct GetTodoResponse {
-    todo: Todo
+    todo: Todo,
 }
 
 pub async fn get_todo(id: web::Path<String>, data: web::Data<AppState>) -> Result<impl Responder> {

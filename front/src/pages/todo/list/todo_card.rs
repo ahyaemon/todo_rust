@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::adapter::todo_client::TodoSummary;
+use dioxus::prelude::*;
 
 #[derive(PartialEq, Props, Clone)]
 pub struct TodoCardProps {

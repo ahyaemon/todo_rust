@@ -1,7 +1,6 @@
 use crate::domain::todo::Todo;
 
 pub trait TodoRepository {
-
     fn get(&self, id: &str) -> Todo;
 
     fn list(&self) -> Vec<Todo>;

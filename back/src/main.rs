@@ -1,22 +1,22 @@
+use actix_cors::Cors;
+use actix_web::{get, http::header, web, App, HttpResponse, HttpServer, Responder};
+use dotenvy_macro::dotenv;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use actix_cors::Cors;
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, http::header};
-use dotenvy_macro::dotenv;
 
-mod domain;
-mod application;
 mod adapter;
+mod application;
+mod domain;
 
-use crate::application::get_todo::get_todo_use_case::GetTodoUseCase;
+use crate::adapter::todo_repository_impl::TodoRepositoryImpl;
 use crate::application::add_todo::add_todo_route::create_todo;
 use crate::application::add_todo::add_todo_use_case::AddTodoUseCase;
 use crate::application::delete_todo::delete_todo_route::delete_todo;
 use crate::application::delete_todo::delete_todo_use_case::DeleteTodoUseCase;
 use crate::application::get_todo::get_todo_route::get_todo;
-use crate::application::list_todo::list_todos_use_case::ListTodosUseCase;
+use crate::application::get_todo::get_todo_use_case::GetTodoUseCase;
 use crate::application::list_todo::list_todo_route::list_todos;
-use crate::adapter::todo_repository_impl::TodoRepositoryImpl;
+use crate::application::list_todo::list_todos_use_case::ListTodosUseCase;
 use crate::application::list_todo_summaries::list_todo_summaries_route::list_todo_summaries;
 use crate::application::list_todo_summaries::list_todo_summaries_use_case::ListTodoSummariesUseCase;
 
@@ -65,10 +65,10 @@ async fn main() -> std::io::Result<()> {
                     .route("/{id}", web::get().to(get_todo))
                     .route("", web::get().to(list_todos))
                     .route("/{id}", web::delete().to(delete_todo))
-                    .route("", web::put().to(create_todo))
+                    .route("", web::put().to(create_todo)),
             )
     })
-        .bind(("127.0.0.1", port))?
-        .run()
-        .await
+    .bind(("127.0.0.1", port))?
+    .run()
+    .await
 }
