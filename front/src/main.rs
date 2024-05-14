@@ -15,6 +15,7 @@ use crate::pages::todo::add::todo_add_page::TodoAddPage;
 use crate::pages::todo::detail::todo_detail_page::TodoDetailPage;
 use crate::pages::todo::list::todo_list_page::TodoListPage;
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Clone, Routable, Debug, PartialEq)]
 enum Route {
     #[route("/")]

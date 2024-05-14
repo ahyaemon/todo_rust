@@ -38,8 +38,7 @@ impl TodoRepository for TodoRepositoryImpl {
             .lock()
             .unwrap()
             .clone()
-            .into_iter()
-            .map(|(_, v)| v)
+            .into_values()
             .collect();
         vec.sort_by(|a, b| a.id().cmp(b.id()));
         vec
@@ -70,13 +69,21 @@ mod tests {
         TodoRepositoryImpl::new(hash_map)
     }
 
+    fn create_todo(post_fix: &str) -> Todo {
+        Todo::new(
+            format!("id{}", post_fix),
+            format!("title{}", post_fix),
+            format!("description{}", post_fix),
+        )
+    }
+
     #[test]
     fn add() {
         let repository = get_repository();
 
-        let todo = Todo::new("1", "title");
+        let todo = create_todo("1");
         let actual = repository.add(todo);
-        let expected = Todo::new("1", "title");
+        let expected = create_todo("1");
         assert_eq!(actual, expected);
     }
 
@@ -84,14 +91,14 @@ mod tests {
     fn get() {
         let repository = get_repository();
 
-        let todo1 = Todo::new("1", "title1");
+        let todo1 = create_todo("1");
         repository.add(todo1.clone());
-        let actual1 = repository.get("1");
+        let actual1 = repository.get("id1");
         assert_eq!(actual1, todo1);
 
-        let todo2 = Todo::new("2", "title2");
+        let todo2 = create_todo("2");
         repository.add(todo2.clone());
-        let actual2 = repository.get("2");
+        let actual2 = repository.get("id2");
         assert_eq!(actual2, todo2);
     }
 
@@ -99,29 +106,43 @@ mod tests {
     fn list() {
         let repository = get_repository();
 
-        let todo1 = Todo::new("1", "title1");
+        let uuid1 = "501d09e6-c484-47e3-941a-7496c61d224b".to_string();
+        let todo_pre1 = Todo::new(
+            uuid1.clone(),
+            "title1".to_string(),
+            "This is description. This is description. This is description.".to_string(),
+        );
+        let uuid2 = "3ed82377-3072-4b79-8bdb-d4c3158fd755".to_string();
+        let todo_pre2 = Todo::new(
+            uuid2.clone(),
+            "title2".to_string(),
+            "This is description. This is description. This is description.".to_string(),
+        );
+
+        let todo1 = create_todo("1");
         repository.add(todo1.clone());
-        let todo2 = Todo::new("2", "title2");
+        let todo2 = create_todo("2");
         repository.add(todo2.clone());
 
         let actual = repository.list();
-        assert_eq!(actual, vec![todo1, todo2])
+        assert_eq!(actual, vec![todo_pre2, todo_pre1, todo1, todo2])
     }
 
     #[test]
     fn delete() {
         let repository = get_repository();
 
-        let todo1 = Todo::new("1", "title1");
+        let todo1 = create_todo("1");
         repository.add(todo1.clone());
-        let todo2 = Todo::new("2", "title2");
+        let todo2 = create_todo("2");
         repository.add(todo2.clone());
+        // NOTE 最初から要素を二つ入れている
+        assert_eq!(repository.list().len(), 4);
+
+        repository.delete("id1");
+        assert_eq!(repository.list().len(), 3);
+
+        repository.delete("id2");
         assert_eq!(repository.list().len(), 2);
-
-        repository.delete("1");
-        assert_eq!(repository.list().len(), 1);
-
-        repository.delete("2");
-        assert_eq!(repository.list().len(), 0);
     }
 }
