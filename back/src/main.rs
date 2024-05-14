@@ -17,12 +17,15 @@ use crate::application::get_todo::get_todo_route::get_todo;
 use crate::application::list_todo::list_todos_use_case::ListTodosUseCase;
 use crate::application::list_todo::list_todo_route::list_todos;
 use crate::adapter::todo_repository_impl::TodoRepositoryImpl;
+use crate::application::list_todo_summaries::list_todo_summaries_route::list_todo_summaries;
+use crate::application::list_todo_summaries::list_todo_summaries_use_case::ListTodoSummariesUseCase;
 
 struct AppState {
     get_todo_use_case: GetTodoUseCase<TodoRepositoryImpl>,
     list_todos_use_case: ListTodosUseCase<TodoRepositoryImpl>,
     add_todo_use_case: AddTodoUseCase<TodoRepositoryImpl>,
     delete_todo_use_case: DeleteTodoUseCase<TodoRepositoryImpl>,
+    list_todo_summaries_use_case: ListTodoSummariesUseCase<TodoRepositoryImpl>,
 }
 
 #[get("/")]
@@ -39,6 +42,7 @@ async fn main() -> std::io::Result<()> {
         list_todos_use_case: ListTodosUseCase::new(repository.clone()),
         add_todo_use_case: AddTodoUseCase::new(repository.clone()),
         delete_todo_use_case: DeleteTodoUseCase::new(repository.clone()),
+        list_todo_summaries_use_case: ListTodoSummariesUseCase::new(repository.clone()),
     });
     let port: u16 = dotenv!("PORT").parse().expect("Env var PORT is not set.");
     println!("use port {}", port);
@@ -57,6 +61,7 @@ async fn main() -> std::io::Result<()> {
             .service(health_check)
             .service(
                 web::scope("/todos")
+                    .route("/summaries", web::get().to(list_todo_summaries))
                     .route("/{id}", web::get().to(get_todo))
                     .route("", web::get().to(list_todos))
                     .route("/{id}", web::delete().to(delete_todo))

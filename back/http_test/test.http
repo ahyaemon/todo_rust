@@ -10,6 +10,10 @@ Accept: application/json
 GET http://localhost:18080/todos
 Accept: application/json
 
+### list summaries
+GET http://localhost:18080/todos/summaries
+Accept: application/json
+
 ### add
 PUT http://localhost:18080/todos
 Content-Type: application/json

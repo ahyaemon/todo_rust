@@ -1,17 +1,21 @@
 use dioxus::prelude::*;
-use crate::domain::todo::Todo;
+use crate::adapter::todo_client::TodoSummary;
 
 #[derive(PartialEq, Props, Clone)]
 pub struct TodoCardProps {
-    todo: Todo,
+    todo_summary: TodoSummary,
 }
 
 pub fn TodoCard(props: TodoCardProps) -> Element {
-    let todo = props.todo;
+    let todo_summary = props.todo_summary;
     rsx! {
         div {
             class: "border-2 p-4 min-w-80",
-            span { "{todo.title}" }
+            p {
+                class: "font-bold",
+                "{todo_summary.title}"
+            }
+            p { "{todo_summary.description_summary}" }
         }
     }
 }

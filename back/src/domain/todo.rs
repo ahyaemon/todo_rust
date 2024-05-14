@@ -2,9 +2,9 @@ use serde::Serialize;
 
 #[derive(Serialize, PartialEq, Debug, Clone)]
 pub struct Todo {
-    id: String,
-    title: String,
-    description: String,
+    pub id: String,
+    pub title: String,
+    pub description: String,
 }
 
 impl Todo {

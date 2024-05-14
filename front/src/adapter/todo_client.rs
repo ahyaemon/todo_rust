@@ -3,13 +3,20 @@ use reqwest::Result;
 use reqwest::Client;
 use crate::domain::todo::Todo;
 
-#[derive(Deserialize, Debug)]
-pub struct ListTodosResponse {
-    pub todos: Vec<Todo>,
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+pub struct TodoSummary {
+    pub id: String,
+    pub title: String,
+    pub description_summary: String,
 }
 
-pub async fn list_todos() -> Result<ListTodosResponse> {
-    reqwest::get("http://localhost:18080/todos")
+#[derive(Deserialize, Debug)]
+pub struct ListTodosResponse {
+    pub todo_summaries: Vec<TodoSummary>,
+}
+
+pub async fn list_todo_summaries() -> Result<ListTodosResponse> {
+    reqwest::get("http://localhost:18080/todos/summaries")
         .await
         .unwrap()
         .json::<ListTodosResponse>()

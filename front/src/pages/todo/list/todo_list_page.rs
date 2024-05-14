@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
-use crate::adapter::todo_client::{list_todos};
+use crate::adapter::todo_client::{list_todo_summaries};
 use crate::components::divider::Divider;
 use crate::layouts::menu::Menu;
 use crate::Route::{TodoDetailPage, TodoAddPage};
@@ -9,16 +9,16 @@ use crate::pages::todo::list::todo_card::TodoCard;
 
 #[component]
 pub fn TodoListPage() -> Element {
-    let future = use_resource(list_todos);
+    let future = use_resource(list_todo_summaries);
 
     let todo_ul = match &*future.read_unchecked() {
         Some(Ok(response)) => {
-            let todos = &response.todos;
-            let todo_items = todos.iter().map( |todo| {
+            let todos = &response.todo_summaries;
+            let todo_items = todos.iter().map( |todo_summary| {
                 rsx! {
                     Link {
-                        to: TodoDetailPage { id: todo.id.clone() },
-                        li { TodoCard { todo: todo.clone() } }
+                        to: TodoDetailPage { id: todo_summary.id.clone() },
+                        li { TodoCard { todo_summary: todo_summary.clone() } }
                     }
                 }
             });
