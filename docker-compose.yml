@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: ./back
+      dockerfile: ./Dockerfile
+    tty: true
+    ports:
+      - '18080:18080'
+    environment:
+      - HOST=0.0.0.0
+  frontend:
+    build:
+      context: ./front
+    tty: true
+    ports:
+      - '3000:80'

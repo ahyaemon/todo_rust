@@ -1,6 +1,5 @@
 use actix_cors::Cors;
 use actix_web::{get, http::header, web, App, HttpResponse, HttpServer, Responder};
-use dotenvy_macro::dotenv;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
@@ -44,8 +43,13 @@ async fn main() -> std::io::Result<()> {
         delete_todo_use_case: DeleteTodoUseCase::new(repository.clone()),
         list_todo_summaries_use_case: ListTodoSummariesUseCase::new(repository.clone()),
     });
-    let port: u16 = dotenv!("PORT").parse().expect("Env var PORT is not set.");
-    println!("use port {}", port);
+    let host: String = dotenvy::var("HOST")
+        .expect("Env var HOST is not set.");
+    let port: u16 = dotenvy::var("PORT")
+        .expect("Env var PORT is not set.")
+        .parse()
+        .expect("Env var PORT should be u16");
+    println!("use {}:{}", host, port);
 
     HttpServer::new(move || {
         let cors = Cors::default()
@@ -68,7 +72,8 @@ async fn main() -> std::io::Result<()> {
                     .route("", web::put().to(create_todo)),
             )
     })
-    .bind(("127.0.0.1", port))?
+    // https://qiita.com/amuyikam/items/01a8c16e3ddbcc734a46
+    .bind((host, port))?
     .run()
     .await
 }
